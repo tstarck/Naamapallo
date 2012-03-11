@@ -21,16 +21,24 @@ class Sinihammas implements Runnable {
     @Override
     public void run() {
         int data = 0;
+
+        System.out.print("Blutuut.");
         NXTConnection yhteys = Bluetooth.waitForConnection(0, NXTConnection.RAW);
         DataInputStream virta = yhteys.openDataInputStream();
+        System.out.println(" We haz!");
 
         while (true) {
             try {
                 data = virta.readInt();
+                System.out.println(".");
             }
             catch (IOException ioe) {
-                System.out.println("IOE");
-                break;
+                System.out.print("\nIO");
+                data = 0;
+            }
+            catch (Exception e) {
+                System.out.print("\nE");
+                data = 0;
             }
 
             tiedote.setIt(data);

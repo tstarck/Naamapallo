@@ -1,5 +1,6 @@
 package fi.starck.naamapallo;
 
+import lejos.nxt.Button;
 import lejos.util.Delay;
 
 /**
@@ -14,8 +15,17 @@ public class Naamapallo {
     }
 
     private void ajele() {
-        System.out.println("goto : " + tiedote.getIt());
-        Delay.msDelay(2000);
+        int data = 0;
+
+        while (!Button.ESCAPE.isDown()) {
+            data = tiedote.getIt();
+
+            if (data != 0) {
+                System.out.print(tiedote.getIt() + " ");
+            }
+
+            Delay.msDelay(500);
+        }
     }
 
     /**
@@ -23,5 +33,6 @@ public class Naamapallo {
      */
     public static void main(String[] argh) {
         new Naamapallo().ajele();
+        System.exit(0);
     }
 }
