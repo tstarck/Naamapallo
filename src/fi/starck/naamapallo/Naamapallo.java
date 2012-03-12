@@ -1,30 +1,45 @@
 package fi.starck.naamapallo;
 
-import lejos.nxt.Button;
+import lejos.nxt.Motor;
+import lejos.robotics.navigation.DifferentialPilot;
 import lejos.util.Delay;
 
 /**
  * @author Tuomas Starck
  */
 public class Naamapallo {
-    private final Tiedote tiedote;
+    private final Tiedote tieto;
+    private final DifferentialPilot wheels;
 
     Naamapallo() {
-        tiedote = new Tiedote();
-        new Sinihammas(tiedote);
+        // Säieturvallinen kommunikointi
+        tieto = new Tiedote();
+
+        // Blutuut-viestintä
+        new Sinihammas(tieto);
+
+        // This is how I roll
+        wheels = new DifferentialPilot(5.66d, 16.66d, Motor.A, Motor.B);
+        wheels.setRotateSpeed(42.0d);
     }
 
     private void ajele() {
-        int data = 0;
+        Toimi toiminto;
 
-        while (!Button.ESCAPE.isDown()) {
-            data = tiedote.getIt();
+        while (true) {
+            toiminto = tieto.nouda();
 
-            if (data != 0) {
-                System.out.print(tiedote.getIt() + " ");
+            if (toiminto == Toimi.STOP) {
+                wheels.stop();
+            }
+            else if (toiminto == Toimi.GO) {
+                wheels.forward();
+            }
+            else {
+                wheels.rotate(tieto.kulma());
             }
 
-            Delay.msDelay(500);
+            Delay.msDelay(333);
         }
     }
 

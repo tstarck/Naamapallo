@@ -30,7 +30,7 @@ class Sinihammas implements Runnable {
         while (true) {
             try {
                 data = virta.readInt();
-                System.out.println(".");
+                System.out.print(".");
             }
             catch (IOException ioe) {
                 System.out.print("\nIO");
@@ -40,8 +40,9 @@ class Sinihammas implements Runnable {
                 System.out.print("\nE");
                 data = 0;
             }
-
-            tiedote.setIt(data);
+            finally {
+                tiedote.aseta(data);
+            }
 
             Delay.msDelay(100);
         }
