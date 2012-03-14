@@ -3,6 +3,7 @@
 *.class
 
 bin/
+doc/
 gen/
 assets/
 

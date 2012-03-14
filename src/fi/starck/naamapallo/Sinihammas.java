@@ -8,16 +8,31 @@ import lejos.nxt.comm.NXTConnection;
 import lejos.util.Delay;
 
 /**
+ * <p>Bluetooth server thread.</p>
+ *
+ * Create Bluetooth server and receive messages allowing <i>Naamakyyla</i>
+ * (Android part of the robot) to connect to it.
+ *
+ * @see fi.starck.naamakyyla
+ *
  * @author Tuomas Starck
  */
 class Sinihammas implements Runnable {
     private final Tiedote tiedote;
 
+    /**
+     * Initialize inter-thread communication and start Bluetooth-server.
+     *
+     * @param t Tiedote object for inter-thread communication.
+     */
     public Sinihammas(Tiedote t) {
         tiedote = t;
         new Thread(this).start();
     }
 
+    /**
+     * Bluetooth server initialization and listener.
+     */
     @Override
     public void run() {
         int data = 0;
@@ -30,20 +45,22 @@ class Sinihammas implements Runnable {
         while (true) {
             try {
                 data = virta.readInt();
-                System.out.print(".");
+                System.out.print("."); // DEBUG
             }
             catch (IOException ioe) {
-                System.out.print("\nIO");
+                System.out.println("\nIO");
                 data = 0;
             }
             catch (Exception e) {
-                System.out.print("\nE");
+                System.out.println("\nE");
                 data = 0;
             }
             finally {
+                // Whatever happened, save the result.
                 tiedote.aseta(data);
             }
 
+            // Try not to consume all available clock cycles.
             Delay.msDelay(100);
         }
     }
