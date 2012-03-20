@@ -34,6 +34,7 @@ class Tiedote {
         else {
             toiminto = Toimi.TURN;
             asteluku = -1 * (i >>> 8) + 44;
+            // ^ bits 9 to 16: [0,88] -> [-44,44]
         }
     }
 
